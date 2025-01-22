@@ -1,11 +1,25 @@
 main :: IO ()
 main = putStrLn (render myhtml)
 
+newtype Html = Html String
+
+newtype Structure = Structure String
+
+type Title = String
+
 myhtml :: Html
 myhtml =
   html_
     "Hello title"
     (append_ (h1_ "Hello, world!") (p_ "Let's learn about Haskell!"))
+
+render :: Html -> String
+render html =
+  case html of
+    Html s -> s
+
+getStructureString :: Structure -> String
+getStructureString (Structure s) = s
 
 html_ :: Title -> Structure -> Html
 html_ title (Structure body) =
@@ -48,19 +62,5 @@ el :: String -> String -> Structure
 el tag content =
   Structure ("<" <> tag <> ">" <> content <> "</" <> tag <> ">")
 
-newtype Html = Html String
-
-newtype Structure = Structure String
-
-type Title = String
-
 append_ :: Structure -> Structure -> Structure
 append_ (Structure str1) (Structure str2) = Structure (str1 <> str2)
-
-render :: Html -> String
-render html =
-  case html of
-    Html s -> s
-
-getStructureString :: Structure -> String
-getStructureString (Structure s) = s
